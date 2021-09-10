@@ -262,7 +262,7 @@ namespace :sidekiq do
       args.push '--daemon'
     end
 
-    execute :sidekiq, args.compact.join(' ')
+    execute :sidekiq, args.compact.join(' '), raise_on_non_zero_exit: false
   end
 
   def switch_user(role)
