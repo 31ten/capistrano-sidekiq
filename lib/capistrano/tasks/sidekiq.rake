@@ -84,7 +84,7 @@ namespace :sidekiq do
 
   desc 'Start sidekiq with wait'
   task :start do
-    on roles  fetch(:sidekiq_roles), wait: 5 do |role|
+    on roles fetch(:sidekiq_roles), in: :sequence, wait: 5 do |role|
       switch_user(role) do
         case fetch(:init_system)
         when :systemd
