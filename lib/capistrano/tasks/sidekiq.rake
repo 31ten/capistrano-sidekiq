@@ -84,7 +84,7 @@ namespace :sidekiq do
 
   desc 'Start sidekiq with wait'
   task :start do
-    on roles fetch(:sidekiq_roles), in: :sequence, wait: 5 do |role|
+    on roles fetch(:sidekiq_roles) do |role|
       switch_user(role) do
         case fetch(:init_system)
         when :systemd
@@ -262,7 +262,15 @@ namespace :sidekiq do
       args.push '--daemon'
     end
 
-    execute :sidekiq, args.compact.join(' '), raise_on_non_zero_exit: false
+    info "try to start sidekiq #{idx}"
+    
+    begin
+      execute :sidekiq, args.compact.join(' '), raise_on_non_zero_exit: false, fetch(:sidekiq_timeout)
+    rescue SSHKit::Command::Failed
+      # If gems are not installed (first deploy) and sidekiq_default_hooks is active
+      info "start sidekiq #{idx} failed"
+    end
+
   end
 
   def switch_user(role)
