@@ -263,9 +263,9 @@ namespace :sidekiq do
     end
 
     info "try to start sidekiq #{idx}"
-    
+
     begin
-      execute :sidekiq, args.compact.join(' '), raise_on_non_zero_exit: false, fetch(:sidekiq_timeout)
+      execute :sidekiq, args.compact.join(' '), raise_on_non_zero_exit: true
     rescue SSHKit::Command::Failed
       # If gems are not installed (first deploy) and sidekiq_default_hooks is active
       info "start sidekiq #{idx} failed"
