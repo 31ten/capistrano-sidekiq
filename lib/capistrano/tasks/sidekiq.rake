@@ -259,7 +259,7 @@ namespace :sidekiq do
       args.push '>/dev/null 2>&1 &'
       warn 'Since JRuby doesn\'t support Process.daemon, Sidekiq will not be running as a daemon.'
     else
-      args.push '--daemon'
+      args.push '--daemon;true'
     end
 
     info "try to start sidekiq #{idx}"
